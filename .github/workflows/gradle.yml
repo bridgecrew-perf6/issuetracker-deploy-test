@@ -52,5 +52,7 @@ jobs:
             sudo docker ps -a -q --filter "name=issuetracker-test" | grep -q . && docker stop issuetracker-test && docker rm issuetracker-test | true
             sudo docker rmi ${{ secrets.DOCKER_USERNAME }}/issuetracker-test:1.0
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/issuetracker-test:1.0
-            sudo docker run -d -p 80:8080 --name issuetracker-test ${{ secrets.DOCKER_USERNAME }}/issuetracker-test:1.0
+            sudo docker run -d -p 80:8080 --name issuetracker-test -e MY_DATABASE_USERNAME=${MY_DATABASE_USERNAME} -e MY_DATABASE_PASSWORD=${MY_DATABASE_PASSWORD} 
+            -e CLIENT_ID=${CLIENT_ID} -e CLIENT_SECRET=${CLIENT_SECRET} -e ISSUER=${ISSUER} -e SECRET_KEY=${SECRET_KEY}
+            ${{ secrets.DOCKER_USERNAME }}/issuetracker-test:1.0
             sudo docker rmi -f $(docker images -f "dangling=true" -q) || true
